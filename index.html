@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Question for You ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6e9; /* Soft Pink */
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Prevents scrollbars during animation */
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 4rem;
+            color: #d6336c; /* Deep Rose */
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative; /* Important for absolute positioning context if needed */
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: 600;
+        }
+
+        .yes-btn {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            background-color: #d6336c;
+        }
+
+        .no-btn {
+            background-color: #fff;
+            color: #d6336c;
+            border: 2px solid #ff4d6d;
+            /* We will change position to absolute via JS when hovered */
+        }
+
+        /* Success Message Styling */
+        .success-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            background-color: rgba(255, 230, 233, 0.9);
+        }
+
+        .success-message {
+            font-family: 'Sacramento', cursive;
+            font-size: 5rem;
+            color: #d6336c;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Animations */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .petal {
+            position: absolute;
+            top: -10vh;
+            font-size: 2rem;
+            animation: fall linear forwards;
+            z-index: 15;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .success-message { font-size: 3.5rem; padding: 0 20px; }
+            button { padding: 12px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="proposal-card">
+        <h1>Will you be my Valentine?</h1>
+        <div class="btn-group">
+            <button class="yes-btn" onclick="acceptProposal()">Yes</button>
+            <button class="no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
+    </div>
+
+    <div class="success-container" id="success-screen">
+        <div class="success-message">Thanks, you will be my Valentine! ❤️</div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        
+        // 1. Logic for the "No" Button
+        const noBtn = document.getElementById('noBtn');
+        const btnGroup = document.querySelector('.btn-group');
+
+        function moveButton() {
+            // Get the window dimensions
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+
+            // Generate random coordinates
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            // Apply new position
+            noBtn.style.position = 'fixed'; // Switch to fixed to break out of flex container
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // 2. Logic for the "Yes" Button
+        function acceptProposal() {
+            // Hide the proposal card
+            document.getElementById('proposal-card').style.display = 'none';
+            
+            // Show the success screen
+            const successScreen = document.getElementById('success-screen');
+            successScreen.style.display = 'flex';
+
+            // Start the petal animation
+            createPetals();
+        }
+
+        // 3. Petal Animation Logic
+        function createPetals() {
+            const petalCount = 50; // Number of petals
+            const emojis = ['🌹', '🌸', '💐', '🌺'];
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Randomize emoji
+                petal.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Randomize position and animation details
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = Math.random() * 3 + 2 + 's'; // Between 2-5s
+                petal.style.animationDelay = Math.random() * 5 + 's'; // Stagger the start
+                petal.style.fontSize = Math.random() * 20 + 20 + 'px'; // Random size
+
+                document.body.appendChild(petal);
+
+                // Cleanup petals after animation to keep DOM light
+                setTimeout(() => {
+                    petal.remove();
+                }, 8000);
+            }
+        }
+    </script>
+</body>
+</html>
