@@ -106,9 +106,10 @@
         .petal {
             position: absolute;
             top: -10vh;
-            font-size: 2rem;
+            /* font-size is handled in JS now for randomness */
             animation: fall linear forwards;
-            z-index: 15;
+            /* Increased z-index so they fall IN FRONT of the success background */
+            z-index: 25; 
         }
 
         /* Mobile Adjustments */
@@ -130,7 +131,7 @@
     </div>
 
     <div class="success-container" id="success-screen">
-        <div class="success-message">Thanks, you will be my Valentine! ❤️</div>
+        <div class="success-message">Thanks Yoo! Yoo! 💖</div>
     </div>
 
     <script>
@@ -170,7 +171,8 @@
 
         // 3. Petal Animation Logic
         function createPetals() {
-            const petalCount = 50; // Number of petals
+            // Increased count for better visibility
+            const petalCount = 80; 
             const emojis = ['🌹', '🌸', '💐', '🌺'];
 
             for (let i = 0; i < petalCount; i++) {
@@ -184,7 +186,9 @@
                 petal.style.left = Math.random() * 100 + 'vw';
                 petal.style.animationDuration = Math.random() * 3 + 2 + 's'; // Between 2-5s
                 petal.style.animationDelay = Math.random() * 5 + 's'; // Stagger the start
-                petal.style.fontSize = Math.random() * 20 + 20 + 'px'; // Random size
+                
+                // UPDATED SIZE: Random size between 40px and 90px
+                petal.style.fontSize = Math.random() * 50 + 40 + 'px'; 
 
                 document.body.appendChild(petal);
 
