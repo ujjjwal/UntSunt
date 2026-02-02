@@ -38,7 +38,8 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            position: relative; /* Important for absolute positioning context if needed */
+            position: relative; 
+            margin-bottom: 25px; /* Added space for the text below */
         }
 
         button {
@@ -66,7 +67,15 @@
             background-color: #fff;
             color: #d6336c;
             border: 2px solid #ff4d6d;
-            /* We will change position to absolute via JS when hovered */
+        }
+
+        /* The new text below the buttons */
+        .shy-message {
+            color: #d6336c;
+            font-size: 1rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 10px;
         }
 
         /* Success Message Styling */
@@ -81,20 +90,23 @@
             width: 100%;
             height: 100%;
             z-index: 20;
-            background-color: rgba(255, 230, 233, 0.9);
+            background-color: rgba(255, 230, 233, 0.95); /* Slightly more opaque */
         }
 
         .success-message {
             font-family: 'Sacramento', cursive;
-            font-size: 5rem;
+            /* Adjusted font size to fit the longer text */
+            font-size: 3.5rem; 
             color: #d6336c;
             animation: heartbeat 1.5s infinite;
+            line-height: 1.3;
+            max-width: 90%;
         }
 
         /* Animations */
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
@@ -106,16 +118,14 @@
         .petal {
             position: absolute;
             top: -10vh;
-            /* font-size is handled in JS now for randomness */
             animation: fall linear forwards;
-            /* Increased z-index so they fall IN FRONT of the success background */
             z-index: 25; 
         }
 
         /* Mobile Adjustments */
         @media (max-width: 600px) {
             h1 { font-size: 3rem; }
-            .success-message { font-size: 3.5rem; padding: 0 20px; }
+            .success-message { font-size: 2.5rem; padding: 0 20px; }
             button { padding: 12px 30px; font-size: 1rem; }
         }
     </style>
@@ -128,10 +138,14 @@
             <button class="yes-btn" onclick="acceptProposal()">Yes</button>
             <button class="no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
         </div>
+        <p class="shy-message">No seems a bit shy 😢</p>
     </div>
 
     <div class="success-container" id="success-screen">
-        <div class="success-message">Thanks Yoo! Yoo! 💖</div>
+        <div class="success-message">
+            Thanks I can't believe my Eyes 👀,<br>
+            you are so Nice and Pretty ❤
+        </div>
     </div>
 
     <script>
@@ -139,7 +153,6 @@
         
         // 1. Logic for the "No" Button
         const noBtn = document.getElementById('noBtn');
-        const btnGroup = document.querySelector('.btn-group');
 
         function moveButton() {
             // Get the window dimensions
@@ -151,7 +164,7 @@
             const randomY = Math.floor(Math.random() * maxY);
 
             // Apply new position
-            noBtn.style.position = 'fixed'; // Switch to fixed to break out of flex container
+            noBtn.style.position = 'fixed'; 
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
@@ -171,9 +184,8 @@
 
         // 3. Petal Animation Logic
         function createPetals() {
-            // Increased count for better visibility
             const petalCount = 80; 
-            const emojis = ['🌹', '🌸', '💐', '🌺'];
+            const emojis = ['🌹', '🌸', '🍂', '❤️'];
 
             for (let i = 0; i < petalCount; i++) {
                 const petal = document.createElement('div');
@@ -184,15 +196,14 @@
                 
                 // Randomize position and animation details
                 petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.animationDuration = Math.random() * 3 + 2 + 's'; // Between 2-5s
-                petal.style.animationDelay = Math.random() * 5 + 's'; // Stagger the start
+                petal.style.animationDuration = Math.random() * 3 + 2 + 's'; 
+                petal.style.animationDelay = Math.random() * 5 + 's'; 
                 
-                // UPDATED SIZE: Random size between 40px and 90px
+                // Big Size: Random between 40px and 90px
                 petal.style.fontSize = Math.random() * 50 + 40 + 'px'; 
 
                 document.body.appendChild(petal);
 
-                // Cleanup petals after animation to keep DOM light
                 setTimeout(() => {
                     petal.remove();
                 }, 8000);
